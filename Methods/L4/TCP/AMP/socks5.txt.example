@@ -1,0 +1,23 @@
+# SOCKS5 Proxy List Format
+# 
+# Format: ip:port
+# Or with authentication: ip:port:username:password
+#
+# Lines starting with # are ignored
+# Empty lines are ignored
+#
+# Example entries:
+
+# No authentication
+192.168.1.100:1080
+proxy.example.com:1080
+10.0.0.50:9050
+
+# With authentication
+192.168.1.101:1080:myuser:mypass
+proxy2.example.com:1080:username:password
+
+# More examples
+203.0.113.1:1080
+198.51.100.1:1080:user123:pass456
+

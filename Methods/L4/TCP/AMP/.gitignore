@@ -1,0 +1,47 @@
+# Compiled binaries
+amp
+*.o
+*.so
+*.a
+
+# Build artifacts
+*.out
+*.exe
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.sublime-*
+
+# OS files
+.DS_Store
+Thumbs.db
+*.bak
+
+# Logs
+*.log
+*.log.*
+
+# Proxy lists (may contain sensitive data)
+socks5.txt
+proxies.txt
+*.proxy
+
+# Test files
+test_*
+*.pcap
+*.cap
+
+# Temporary files
+tmp/
+temp/
+*.tmp
