@@ -148,8 +148,8 @@ Effective DDoS protection requires **multiple layers** of defense:
 
 ```
 ┌─────────────────────────────────────────┐
-│  Layer 1: Network-Level Filtering      │
-│  - iptables/nftables rules             │
+│  Layer 1: Network-Level Filtering       │
+│  - iptables/nftables rules              │
 │  - Rate limiting                        │
 │  - GeoIP filtering                      │
 └─────────────────────────────────────────┘
@@ -163,13 +163,13 @@ Effective DDoS protection requires **multiple layers** of defense:
            ↓
 ┌─────────────────────────────────────────┐
 │  Layer 3: Application-Level Protection  │
-│  - WAF (Web Application Firewall)      │
+│  - WAF (Web Application Firewall)       │
 │  - Request validation                   │
 │  - Rate limiting per endpoint           │
 └─────────────────────────────────────────┘
            ↓
 ┌─────────────────────────────────────────┐
-│  Layer 4: DDoS Protection Services     │
+│  Layer 4: DDoS Protection Services      │
 │  - Cloudflare, AWS Shield               │
 │  - On-premise mitigation appliances     │
 └─────────────────────────────────────────┘
