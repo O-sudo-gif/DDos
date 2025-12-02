@@ -1,6 +1,6 @@
 # DDoS Methods & Protection Repository
 
-> **TCP ACK Flood attack implementation with comprehensive protection strategies**
+> **Multi-vector TCP flood attack implementations with comprehensive bypass techniques and protection strategies**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Platform: Linux](https://img.shields.io/badge/Platform-Linux-lightgrey.svg)](https://www.kernel.org/)
@@ -39,14 +39,18 @@
 
 ## 🎯 Overview
 
-This repository provides a **TCP ACK Flood attack** implementation along with detailed **protection guides** to help security professionals:
+This repository provides **multi-vector TCP flood attack** implementations along with detailed **protection guides** to help security professionals:
 
-- **Understand** how TCP ACK flood attacks work
-- **Test** network infrastructure resilience against ACK floods
+- **Understand** how TCP flood attacks work
+- **Test** network infrastructure resilience against TCP floods
 - **Implement** effective countermeasures and detection
 - **Learn** about attack signatures and protection methods
 
-**Current Release:** TCP ACK Flood (`ack.c`)
+**Current Releases:**
+- ✅ TCP ACK Flood (`ack.c`) - Fully implemented with protection guides
+- ✅ TCP SYN Flood (`syn.c`) - Fully implemented with documentation
+- ✅ TCP-AMP: SYN-ACK Flood + BGP Amplification (`amp.c`) - Fully implemented
+- ✅ **TCP-RAPE: Multi-Vector TCP Attack** (`rape.c`) - v2.0.0 with clever bypass techniques
 
 > **Note:** More attack methods will be added incrementally as updates to this repository.
 
@@ -55,6 +59,9 @@ This repository provides a **TCP ACK Flood attack** implementation along with de
 ## 📦 What's Included
 
 - ✅ **ack.c** - High-performance TCP ACK flood implementation
+- ✅ **syn.c** - High-performance TCP SYN flood implementation
+- ✅ **amp.c** - High-performance TCP SYN-ACK flood with BGP amplification
+- ✅ **rape.c** - Multi-vector TCP attack with clever bypass techniques (v2.0.0)
 - ✅ **Protection Guides** - Comprehensive defense strategies (English & Greek)
 - ✅ **Signature-Based Detection** - Methods to identify and block attacks
 - ✅ **Architecture Documentation** - Technical implementation details
@@ -69,41 +76,80 @@ This repository provides a **TCP ACK Flood attack** implementation along with de
 Methods/
 ├── L4/
 │   └── TCP/
-│       └── ACK/                               # TCP ACK Flood Attack
-│           ├── ack.c                          # Attack implementation
+│       ├── ACK/                               # TCP ACK Flood Attack
+│       │   ├── ack.c                          # Attack implementation
+│       │   ├── README.md                      # Attack documentation
+│       │   ├── ARCHITECTURE.md                # Technical architecture
+│       │   ├── USAGE_EXAMPLES.md              # Usage examples
+│       │   ├── Makefile                       # Build configuration
+│       │   ├── LICENSE                        # MIT License
+│       │   ├── socks5.txt.example             # SOCKS5 proxy example
+│       │   ├── .gitignore                     # Git ignore rules
+│       │   └── PROTECTION/                    # Protection guides
+│       │       └── SIGNATURE_BASED_PROTECTION_GR.md  # Signature-based protection (Greek)
+│       │
+│       ├── SYN/                               # TCP SYN Flood Attack
+│       │   ├── syn.c                          # Attack implementation
+│       │   ├── README.md                      # Attack documentation
+│       │   ├── ARCHITECTURE.md                # Technical architecture
+│       │   ├── USAGE_EXAMPLES.md              # Usage examples
+│       │   ├── Makefile                       # Build configuration
+│       │   ├── LICENSE                        # MIT License
+│       │   ├── socks5.txt.example             # SOCKS5 proxy example
+│       │   ├── .gitignore                     # Git ignore rules
+│       │   └── PROTECTION/                    # Protection guides
+│       │       ├── README.md                  # Protection overview
+│       │       └── SIGNATURE_BASED_PROTECTION_GR.md  # Signature-based protection (Greek)
+│       │
+│       ├── AMP/                               # TCP-AMP: SYN-ACK Flood + BGP Amplification
+│       │   ├── amp.c                          # Attack implementation
+│       │   ├── README.md                      # Attack documentation
+│       │   ├── ARCHITECTURE.md                # Technical architecture
+│       │   ├── USAGE_EXAMPLES.md              # Usage examples
+│       │   ├── Makefile                       # Build configuration
+│       │   ├── LICENSE                        # MIT License
+│       │   ├── socks5.txt.example             # SOCKS5 proxy example
+│       │   ├── .gitignore                     # Git ignore rules
+│       │   └── PROTECTION/                    # Protection guides
+│       │       └── SIGNATURE_BASED_PROTECTION_GR.md  # Signature-based protection (Greek)
+│       │
+│       └── RAPE/                              # TCP-RAPE: Multi-Vector TCP Attack
+│           ├── rape.c                        # Attack implementation
 │           ├── README.md                      # Attack documentation
-│           ├── ARCHITECTURE.md                # Technical architecture
 │           ├── USAGE_EXAMPLES.md              # Usage examples
+│           ├── CHANGELOG.md                   # Version history
+│           ├── CONTRIBUTING.md                # Contribution guidelines
+│           ├── SECURITY.md                    # Security policy
+│           ├── DEPLOYMENT.md                  # Deployment instructions
 │           ├── Makefile                       # Build configuration
 │           ├── LICENSE                        # MIT License
-│           ├── socks5.txt.example             # SOCKS5 proxy example
-│           ├── .gitignore                     # Git ignore rules
-│           └── PROTECTION/                    # Protection guides
-│               └── SIGNATURE_BASED_PROTECTION_GR.md  # Signature-based protection (Greek)
+│           └── .gitignore                     # Git ignore rules
 │
 └── README.md                                  # This file
 ```
 
 ---
 
-## 🔥 TCP ACK Flood Attack
+## 🔥 TCP Flood Attacks
 
-### Description
+### TCP ACK Flood Attack
+
+#### Description
 
 The **TCP ACK Flood** attack sends a flood of TCP ACK (Acknowledgment) packets with spoofed source IPs and SACK (Selective Acknowledgment) blocks to overwhelm the target server.
 
 ### How It Works
 
 ```
-┌─────────────┐          ┌──────────────┐         ┌─────────────┐
-│  Attacker   │────────▶│    Spoofed   │────────▶│   Target    │
-│             │          │     IPs      │         │    Server   │
-└─────────────┘          └──────────────┘         └─────────────┘
+┌─────────────┐         ┌──────────────┐         ┌─────────────┐
+│   Attacker  │────────▶│  Spoofed    │────────▶│   Target    │
+│             │         │     IPs      │         │   Server    │
+└─────────────┘         └──────────────┘         └─────────────┘
      │                         │                        │
      │ 1. Generate spoofed IPs │                        │
      │ 2. Craft ACK packets    │                        │
      │ 3. Add SACK blocks      │                        │
-     │ 4. Send flood           │───────────────────────▶│
+     │ 4. Send flood           │──────────────────────▶│
      │                         │                        │
      │                         │                        │
      │                         │      Resource          │
@@ -122,7 +168,7 @@ The **TCP ACK Flood** attack sends a flood of TCP ACK (Acknowledgment) packets w
 - ✅ **Connection State Tracking** - Maintains state for realistic sequences
 - ✅ **High Performance** - Up to 500,000+ PPS on modern hardware
 
-### Attack Signatures
+#### Attack Signatures
 
 The attack can be identified by these unique signatures:
 
@@ -131,12 +177,178 @@ The attack can be identified by these unique signatures:
 3. **0xFF Payload Pattern** - 1420 bytes all set to 0xFF
 4. **Pure ACK Packets** - Only ACK flag set, no SYN/FIN/RST
 
-### Impact
+#### Impact
 
 - ⚠️ **Resource Exhaustion** - Server processes invalid ACK packets
 - ⚠️ **Bandwidth Consumption** - High packet rate consumes network bandwidth
 - ⚠️ **Service Degradation** - Can cause slowdowns or complete outage
 - ⚠️ **Connection Queue Overflow** - May fill connection tracking tables
+
+### TCP SYN Flood Attack
+
+#### Description
+
+The **TCP SYN Flood** attack sends a flood of TCP SYN (Synchronize) packets with spoofed source IPs and random TCP options to exhaust the target server's connection queue.
+
+#### How It Works
+
+```
+┌─────────────┐         ┌──────────────┐         ┌─────────────┐
+│   Attacker  │────────▶│  Spoofed    │────────▶│   Target    │
+│             │         │     IPs      │         │   Server    │
+└─────────────┘         └──────────────┘         └─────────────┘
+     │                         │                        │
+     │ 1. Generate spoofed IPs │                        │
+     │ 2. Craft SYN packets    │                        │
+     │ 3. Add random TCP opts  │                        │
+     │ 4. Send flood           │───────────────────────▶│
+     │                         │                        │
+     │                         │      Connection        │
+     │                         │      Queue Exhaustion  │
+     │                         │◀───────────────────────│
+```
+
+#### Key Characteristics
+
+- ✅ **Raw Socket Implementation** - Direct packet crafting at kernel level
+- ✅ **IP Spoofing** - Generates spoofed source IPs across multiple ranges
+- ✅ **Random TCP Options** - MSS, Window Scale, Timestamp, SACK_PERM
+- ✅ **Multi-threading** - Supports up to 10,000 concurrent threads
+- ✅ **Rate Limiting** - Built-in rate limiter
+- ✅ **SOCKS5 Proxy Support** - Optional proxy routing for anonymity
+- ✅ **Connection State Tracking** - Maintains state for realistic sequences
+- ✅ **High Performance** - Up to 500,000+ PPS on modern hardware
+
+#### Attack Signatures
+
+The attack can be identified by these characteristics:
+
+1. **SYN Flag Only** - Only SYN flag set, no ACK/FIN/RST
+2. **Random TCP Options** - Variable combinations of MSS, Window Scale, Timestamp
+3. **No Payload** - Pure SYN packets (~40-80 bytes)
+4. **High SYN Rate** - Unusually high rate of SYN packets
+
+#### Impact
+
+- ⚠️ **Connection Queue Exhaustion** - Fills server's SYN backlog
+- ⚠️ **Resource Consumption** - Server allocates memory for each SYN
+- ⚠️ **Service Degradation** - Legitimate connections may be rejected
+- ⚠️ **SYN Timeout** - Server waits for ACK that never comes
+
+### TCP-AMP: SYN-ACK Flood + BGP Amplification
+
+#### Description
+
+The **TCP-AMP (SYN-ACK Flood with BGP Amplification)** attack sends a flood of TCP SYN-ACK packets with optional BGP payloads to overwhelm the target server. When BGP amplification is enabled, the attack leverages BGP routers to amplify the attack traffic.
+
+#### How It Works
+
+```
+┌─────────────┐         ┌──────────────┐         ┌─────────────┐
+│   Attacker  │────────▶│  Spoofed    │────────▶│   Target    │
+│             │         │     IPs      │         │   Server    │
+└─────────────┘         └──────────────┘         └─────────────┘
+     │                         │                        │
+     │ 1. Generate spoofed IPs │                        │
+     │ 2. Craft SYN-ACK packets│                        │
+     │ 3. Add BGP payload (opt) │                        │
+     │ 4. Send flood           │──────────────────────▶│
+     │                         │                        │
+     │                         │      Resource          │
+     │                         │      Exhaustion        │
+     │                         │◀───────────────────────│
+```
+
+#### Key Characteristics
+
+- ✅ **Raw Socket Implementation** - Direct packet crafting at kernel level
+- ✅ **SYN-ACK Packets** - Both SYN and ACK flags set (simulates established connection)
+- ✅ **BGP Amplification** - Optional BGP payload for amplification attacks
+- ✅ **IP Spoofing** - Generates spoofed source IPs across multiple ranges
+- ✅ **Random TCP Options** - MSS, Window Scale, Timestamp, SACK_PERM
+- ✅ **Multi-threading** - Supports up to 10,000 concurrent threads
+- ✅ **Rate Limiting** - Built-in rate limiter
+- ✅ **SOCKS5 Proxy Support** - Optional proxy routing for anonymity
+- ✅ **Connection State Tracking** - Maintains state for realistic sequences
+- ✅ **High Performance** - Up to 500,000+ PPS on modern hardware
+
+#### Attack Signatures
+
+The attack can be identified by these characteristics:
+
+1. **SYN-ACK Flags** - Both SYN and ACK flags set
+2. **BGP Payload** - 79 bytes BGP OPEN message (if `--bgp` flag enabled)
+3. **BGP Marker** - 16 bytes of 0xFF (BGP authentication marker)
+4. **Packet Size** - ~60 bytes (without BGP), ~140 bytes (with BGP)
+5. **Random TCP Options** - Variable combinations of MSS, Window Scale, Timestamp
+
+#### Impact
+
+- ⚠️ **Resource Exhaustion** - Server processes invalid SYN-ACK packets
+- ⚠️ **Bandwidth Consumption** - High packet rate consumes network bandwidth
+- ⚠️ **BGP Amplification** - BGP routers respond with large UPDATE messages
+- ⚠️ **Service Degradation** - Can cause slowdowns or complete outage
+- ⚠️ **Connection Confusion** - SYN-ACK packets may confuse connection state machines
+
+### TCP-RAPE: Multi-Vector TCP Attack
+
+#### Description
+
+The **TCP-RAPE (Multi-Vector TCP Attack)** is a comprehensive attack tool that combines multiple TCP flood techniques simultaneously to maximize server impact. It implements various attack vectors including SYN, ACK, FIN, RST, PSH, URG, SYN-ACK, FIN-ACK, and mixed flag combinations.
+
+#### How It Works
+
+```
+┌─────────────┐         ┌──────────────┐         ┌─────────────┐
+│   Attacker  │────────▶│  Spoofed    │────────▶│   Target    │
+│             │         │     IPs      │         │   Server    │
+└─────────────┘         └──────────────┘         └─────────────┘
+     │                         │                        │
+     │ 1. Generate spoofed IPs │                        │
+     │ 2. Rotate attack types  │                        │
+     │ 3. Apply bypass techs   │                        │
+     │ 4. Send multi-vector    │──────────────────────▶│
+     │    flood                │                        │
+     │                         │      Multi-Vector      │
+     │                         │      Resource          │
+     │                         │      Exhaustion        │
+     │                         │◀───────────────────────│
+```
+
+#### Key Characteristics
+
+- ✅ **Multi-Vector Attack** - Rotates through SYN, ACK, FIN, RST, PSH, URG, SYN-ACK, FIN-ACK, MIXED
+- ✅ **Clever Bypass Techniques** - Variable TCP options (0-20 bytes), variable header size, SYN-first simulation
+- ✅ **Elite Bypass Mode** - Full connection simulation for advanced protection systems (Cloudflare, AWS Shield)
+- ✅ **Stealth Mode** - Maximum bypass with HTTP payloads, OS fingerprinting, human timing patterns
+- ✅ **IP Spoofing** - Generates spoofed source IPs across multiple ranges
+- ✅ **Variable Payload Sizes** - Random payload generation to avoid pattern detection
+- ✅ **IP ID Patterns Per Connection** - Incremental IP IDs matching real OS behavior
+- ✅ **SACK Blocks** - Includes SACK_PERM and SACK blocks for established connections
+- ✅ **Rate Limiting Bypass** - Variable micro-delays (10-100μs) to avoid detection
+- ✅ **Multi-threading** - Supports up to 10,000 concurrent threads per worker
+- ✅ **High Performance** - Up to 500,000+ PPS on modern hardware
+- ✅ **Real-time Statistics** - Live monitoring of all packet types
+
+#### Attack Signatures
+
+The attack can be identified by these characteristics:
+
+1. **Variable TCP Options (0-20 bytes)** - Clever bypass technique to avoid 40-byte detection
+2. **Variable TCP Header Size (doff 5-15)** - Dynamic header size instead of fixed
+3. **SYN-First Patterns** - SYN packets before data packets (30-40% chance)
+4. **Variable Payload Sizes** - Most ACK packets have no payload (70% chance)
+5. **IP ID Patterns** - Incremental IP IDs per connection hash
+6. **SACK Blocks** - Rare SACK blocks in established connections (5% chance)
+7. **Multiple Attack Types** - Rotation through SYN, ACK, FIN, RST, PSH, URG, etc.
+
+#### Impact
+
+- ⚠️ **Connection Queue Exhaustion** - SYN floods fill connection backlog
+- ⚠️ **Resource Exhaustion** - CPU and memory consumption from multiple attack vectors
+- ⚠️ **Service Degradation** - Slowdown or complete outage
+- ⚠️ **State Machine Confusion** - Mixed flags confuse TCP state tracking
+- ⚠️ **Bypass Capabilities** - Can evade advanced protection systems with elite/stealth modes
 
 ---
 
@@ -253,17 +465,34 @@ Implement real-time monitoring:
 
 ```bash
 # Clone repository
-git clone https://github.com/o-sudo-gif/ddos-methods.git
-cd ddos-methods/Methods/L4/TCP/ACK
+git clone https://github.com/yourusername/ddos-methods.git
+cd ddos-methods/Methods/L4/TCP
 
 # Build ACK flood tool
+cd ACK
+make
+
+# Build SYN flood tool
+cd ../SYN
+make
+
+# Build AMP (SYN-ACK + BGP) tool
+cd ../AMP
+make
+
+# Build RAPE (Multi-Vector) tool
+cd ../RAPE
 make
 
 # Or manually compile
 gcc -o ack ack.c -lpthread -O3 -Wall
+gcc -o syn syn.c -lpthread -O3 -Wall
+gcc -o rape rape.c -lpthread -O3 -Wall -Wno-unused-result
 ```
 
 ### Usage
+
+#### TCP ACK Flood
 
 ```bash
 # Basic syntax (requires root)
@@ -276,6 +505,41 @@ sudo ./ack 192.168.1.100 80 300 60 100000
 sudo ./ack 192.168.1.100 443 500 120 200000 --socks5
 ```
 
+#### TCP SYN Flood
+
+```bash
+# Basic syntax (requires root)
+sudo ./syn <target_ip> <target_port> <threads> <duration> <max_pps> [--socks5]
+
+# Example: Basic SYN flood
+sudo ./syn 192.168.1.100 80 300 60 100000
+
+# Example: With SOCKS5 proxies
+sudo ./syn 192.168.1.100 443 500 120 200000 --socks5
+```
+
+#### TCP-RAPE: Multi-Vector Attack
+
+```bash
+# Basic syntax (requires root)
+sudo ./rape <target_ip> <target_port> <threads> <duration> <max_pps> [attack_mode] [--elite] [--stealth]
+
+# Example: All attack types (rotates through SYN, ACK, FIN, RST, etc.)
+sudo ./rape 192.168.1.100 80 500 60 200000 all
+
+# Example: Elite mode (bypass advanced protections)
+sudo ./rape 192.168.1.100 80 500 300 200000 all --elite
+
+# Example: Stealth mode (maximum bypass)
+sudo ./rape 192.168.1.100 80 500 300 200000 all --stealth
+
+# Example: SYN flood only
+sudo ./rape 192.168.1.100 80 300 60 100000 syn
+
+# Example: ACK flood only
+sudo ./rape 192.168.1.100 443 300 60 100000 ack
+```
+
 **Parameters:**
 - `target_ip` - Target server IP address
 - `target_port` - Target TCP port (e.g., 80, 443, 22)
@@ -284,7 +548,7 @@ sudo ./ack 192.168.1.100 443 500 120 200000 --socks5
 - `max_pps` - Maximum packets per second (e.g., 100000)
 - `--socks5` - (Optional) Enable SOCKS5 proxy mode (requires `socks5.txt`)
 
-**Example Output:**
+**Example Output (ACK):**
 ```
 [+] Starting 300 threads with PURE ACK FLOOD
 [+] Target: 192.168.1.100:80
@@ -294,6 +558,32 @@ sudo ./ack 192.168.1.100 443 500 120 200000 --socks5
 [*] Running for 60 seconds...
 
 [LIVE] PPS: 98500 | Sent: 5910000 | Failed: 150 | Mbps: 78.80
+```
+
+**Example Output (SYN):**
+```
+[+] Starting 300 threads with PURE SYN FLOOD
+[+] Target: 192.168.1.100:80
+[+] Maximum PPS: 100000
+[*] Attack: 100% SYN packets with random TCP options (MSS, Window Scale, Timestamp)
+[*] Running for 60 seconds...
+
+[LIVE] PPS: 98500 | Sent: 5910000 | Failed: 150 | Mbps: 7.88
+```
+
+**Example Output (RAPE - Multi-Vector):**
+```
+[+] TCP-RAPE: Multi-Vector TCP Attack Tool
+[+] Target: 192.168.1.100:80
+[+] Threads: 500
+[+] Duration: 60 seconds
+[+] Max PPS: 200000
+[+] Attack Mode: ALL
+[+] ELITE MODE: ENABLED (Full connection simulation, behavioral patterns, maximum bypass)
+[*] MAXIMUM POWER MODE: 10,000 sockets per thread, 512MB buffers, zero delays, 10-20 packets/burst
+[*] Starting attack...
+
+[LIVE] PPS: 185000 | Total: 11100000 | SYN: 1230000 | ACK: 1230000 | FIN: 1230000 | RST: 1230000 | PSH: 1230000 | URG: 1230000 | MIXED: 1230000 | Mbps: 148.00
 ```
 
 ### Testing Protection
@@ -310,7 +600,7 @@ sudo ./ack 192.168.1.100 443 500 120 200000 --socks5
 
 ### Available Documentation
 
-The TCP ACK Flood implementation includes comprehensive documentation:
+#### TCP ACK Flood
 
 | Document                             | Description                                       | Location                                                 |
 |--------------------------------------|---------------------------------------------------|----------------------------------------------------------|
@@ -319,10 +609,30 @@ The TCP ACK Flood implementation includes comprehensive documentation:
 | **SIGNATURE_BASED_PROTECTION_GR.md** | Signature-based protection guide (Greek)          | `L4/TCP/ACK/PROTECTION/SIGNATURE_BASED_PROTECTION_GR.md` |
 | **USAGE_EXAMPLES.md**                | Practical usage examples and scenarios            | `L4/TCP/ACK/USAGE_EXAMPLES.md`                           |
 
+#### TCP SYN Flood
+
+| Document                             | Description                                       | Location                                                 |
+|--------------------------------------|---------------------------------------------------|----------------------------------------------------------|
+| **README.md**                        | Attack overview, usage, and features              | `L4/TCP/SYN/README.md`                                   |
+| **ARCHITECTURE.md**                  | Technical architecture and implementation details | `L4/TCP/SYN/ARCHITECTURE.md`                             |
+| **USAGE_EXAMPLES.md**                | Practical usage examples and scenarios            | `L4/TCP/SYN/USAGE_EXAMPLES.md`                           |
+| **SIGNATURE_BASED_PROTECTION_GR.md** | Signature-based protection guide (Greek)          | `L4/TCP/SYN/PROTECTION/SIGNATURE_BASED_PROTECTION_GR.md` |
+
+#### TCP-RAPE: Multi-Vector Attack
+
+| Document          | Description                    | Location                    |
+|-------------------|--------------------------------|-----------------------------|
+| **README.md**     | Attack overview, usage, and features | `L4/TCP/RAPE/README.md`     |
+| **USAGE_EXAMPLES.md** | Practical usage examples and scenarios | `L4/TCP/RAPE/USAGE_EXAMPLES.md` |
+| **CHANGELOG.md**  | Version history and changes    | `L4/TCP/RAPE/CHANGELOG.md`  |
+| **CONTRIBUTING.md** | Contribution guidelines     | `L4/TCP/RAPE/CONTRIBUTING.md` |
+| **SECURITY.md**   | Security policy                | `L4/TCP/RAPE/SECURITY.md`   |
+
 ### Protection Guides
 
-- **English:** See `L4/TCP/ACK/README.md` for protection strategies
-- **Greek (Ελληνικά):** See `L4/TCP/ACK/PROTECTION/SIGNATURE_BASED_PROTECTION_GR.md` for detailed protection guide
+- **ACK Flood:** See `L4/TCP/ACK/README.md` and `L4/TCP/ACK/PROTECTION/SIGNATURE_BASED_PROTECTION_GR.md`
+- **SYN Flood:** See `L4/TCP/SYN/README.md` and `L4/TCP/SYN/PROTECTION/SIGNATURE_BASED_PROTECTION_GR.md`
+- **RAPE (Multi-Vector):** See `L4/TCP/RAPE/README.md` for comprehensive protection strategies
 
 ---
 
@@ -518,20 +828,22 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 📈 Roadmap
 
-### Current Release
+### Current Releases
 
 - ✅ **TCP ACK Flood** (`ack.c`) - Fully implemented with protection guides
+- ✅ **TCP SYN Flood** (`syn.c`) - Fully implemented with documentation
+- ✅ **TCP-AMP: SYN-ACK + BGP** (`amp.c`) - Fully implemented
+- ✅ **TCP-RAPE: Multi-Vector** (`rape.c`) - v2.0.0 with clever bypass techniques
 
 ### Planned Updates
 
 More attack methods will be added incrementally:
-
-- [ ] **TCP SYN Flood** - SYN flood attack implementation
 - [ ] **UDP Flood** - UDP-based flood attacks
 - [ ] **HTTP Flood** - Layer 7 HTTP flood attacks
 - [ ] **Slowloris** - Slow HTTP attack
 - [ ] **DNS Amplification** - DNS amplification attack
 - [ ] **NTP Amplification** - NTP amplification attack
+- [ ] **Minecraft Attack** - Protocol-specific attacks
 
 ### Future Enhancements
 
@@ -547,12 +859,25 @@ More attack methods will be added incrementally:
 
 Typical performance on modern hardware:
 
-| Attack    | Threads | PPS  | CPU Usage | Memory |
-|-----------|---------|------|-----------|--------|
-| ACK Flood | 300     | 100k | 40%       | 200MB  |
-
+| Attack         | Threads | PPS  | CPU Usage | Memory | Packet Size     |
+|----------------|---------|------|-----------|--------|-----------------|
+| ACK Flood      | 300     | 100k | 40%       | 200MB  | ~1500 bytes     |
+| SYN Flood      | 300     | 100k | 35%       | 150MB  | ~40-80 bytes    |
+| RAPE (All Mode)| 500     | 200k | 70%       | 400MB  | ~60-1500 bytes  |
+| RAPE (Elite)   | 500     | 200k | 70%       | 400MB  | ~60-1500 bytes  |
+| RAPE (Stealth) | 500     | 200k | 70%       | 400MB  | ~60-1500 bytes  |
 
 *Results vary by hardware and network conditions*
+
+---
+
+## 🌍 Internationalization
+
+Documentation available in:
+- 🇬🇧 **English** - Primary language (README, ARCHITECTURE, USAGE_EXAMPLES)
+- 🇬🇷 **Greek (Ελληνικά)** - Protection guides (SIGNATURE_BASED_PROTECTION_GR.md)
+
+Contributions for additional languages welcome!
 
 ---
 
@@ -590,7 +915,13 @@ If you discover a vulnerability in protection mechanisms:
 
 ## 📌 Current Status
 
-**Active Development** - TCP ACK Flood implementation is complete and ready for use.
+**Active Development** - Multiple TCP flood attack implementations are complete and ready for use.
+
+**Available Attacks:**
+- ✅ TCP ACK Flood - Complete with protection guides
+- ✅ TCP SYN Flood - Complete with documentation
+- ✅ TCP-AMP: SYN-ACK + BGP - Complete with documentation
+- ✅ **TCP-RAPE: Multi-Vector** - v2.0.0 with clever bypass techniques (Elite & Stealth modes)
 
 **Next Updates:**
 - More attack methods will be added as separate updates
