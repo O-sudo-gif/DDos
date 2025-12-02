@@ -1,0 +1,33 @@
+# Compiled binaries
+rape
+*.o
+*.out
+*.exe
+
+# Build artifacts
+*.a
+*.so
+*.dylib
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+attack.log
+*.txt.log
+
+# Temporary files
+*.tmp
+*.bak
+*.cache
+
+# System files
+Thumbs.db
+desktop.ini
+
