@@ -1,0 +1,24 @@
+{
+  "name": "http-storm",
+  "version": "2.0.0",
+  "description": "High-performance HTTP/2 and HTTP/1.1 load testing tool",
+  "main": "http-storm.js",
+  "scripts": {
+    "start": "node http-storm.js"
+  },
+  "keywords": [
+    "load-testing",
+    "http2",
+    "performance",
+    "testing"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "hpack": "^0.1.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
+

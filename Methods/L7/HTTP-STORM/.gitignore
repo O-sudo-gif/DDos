@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Proxy files (sensitive)
+*.txt
+!README.txt
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+

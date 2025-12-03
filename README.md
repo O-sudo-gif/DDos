@@ -51,6 +51,7 @@ This repository provides **multi-vector TCP flood attack** implementations along
 - ✅ TCP SYN Flood (`syn.c`) - Fully implemented with documentation
 - ✅ TCP-AMP: SYN-ACK Flood + BGP Amplification (`amp.c`) - Fully implemented
 - ✅ **TCP-RAPE: Multi-Vector TCP Attack** (`rape.c`) - v2.0.0 with clever bypass techniques
+- ✅ **HTTP-STORM: HTTP/2 Load Testing Tool** (`http-storm.js`) - v2.0 Enhanced for 100k+ req/s
 
 > **Note:** More attack methods will be added incrementally as updates to this repository.
 
@@ -62,6 +63,7 @@ This repository provides **multi-vector TCP flood attack** implementations along
 - ✅ **syn.c** - High-performance TCP SYN flood implementation
 - ✅ **amp.c** - High-performance TCP SYN-ACK flood with BGP amplification
 - ✅ **rape.c** - Multi-vector TCP attack with clever bypass techniques (v2.0.0)
+- ✅ **http-storm.js** - HTTP/2 and HTTP/1.1 load testing tool (v2.0 Enhanced)
 - ✅ **Protection Guides** - Comprehensive defense strategies (English & Greek)
 - ✅ **Signature-Based Detection** - Methods to identify and block attacks
 - ✅ **Architecture Documentation** - Technical implementation details
@@ -124,6 +126,16 @@ Methods/
 │           ├── Makefile                       # Build configuration
 │           ├── LICENSE                        # MIT License
 │           └── .gitignore                     # Git ignore rules
+│
+└── L7/                                        # Layer 7 (Application) Attacks
+    └── HTTP-STORM/                            # HTTP/2 Load Testing Tool
+        ├── PROTECTION/                        # Protection guides
+        │   ├── PROTECTION_GUIDE.md            # Sophisticated protection
+        │   └── README.md                      # Protection overview  
+        ├── http-storm.js                      # HTTP/2 load testing implementation
+        ├── README.md                          # Comprehensive documentation
+        ├── package.json                       # Node.js dependencies
+        └── .gitignore                         # Git ignore rules
 │
 └── README.md                                  # This file
 ```
@@ -251,7 +263,7 @@ The **TCP-AMP (SYN-ACK Flood with BGP Amplification)** attack sends a flood of T
      │                         │                        │
      │ 1. Generate spoofed IPs │                        │
      │ 2. Craft SYN-ACK packets│                        │
-     │ 3. Add BGP payload (opt) │                        │
+     │ 3. Add BGP payload (opt) │                       │
      │ 4. Send flood           │──────────────────────▶│
      │                         │                        │
      │                         │      Resource          │
@@ -349,6 +361,64 @@ The attack can be identified by these characteristics:
 - ⚠️ **Service Degradation** - Slowdown or complete outage
 - ⚠️ **State Machine Confusion** - Mixed flags confuse TCP state tracking
 - ⚠️ **Bypass Capabilities** - Can evade advanced protection systems with elite/stealth modes
+
+### HTTP-STORM: HTTP/2 Load Testing Tool
+
+#### Description
+
+The **HTTP-STORM** tool is a high-performance HTTP/2 and HTTP/1.1 load testing tool designed for stress testing web applications, APIs, and CDN infrastructure. It supports both HTTP/2 and HTTP/1.1 protocols with advanced features like proxy rotation, custom headers, and intelligent rate limiting.
+
+#### How It Works
+
+```
+┌─────────────┐         ┌──────────────┐         ┌─────────────┐
+│   Master    │────────▶│   Workers    │───────▶│   Target    │
+│  Process    │         │  (Cluster)   │         │   Server    │
+└─────────────┘         └──────────────┘         └─────────────┘
+     │                         │                        │
+     │ 1. Parse arguments      │                        │
+     │ 2. Load proxy list      │                        │
+     │ 3. Spawn workers        │                        │
+     │                         │                        │
+     │                         │ 1. Select proxy        │
+     │                         │ 2. Establish TLS       │
+     │                         │ 3. Negotiate protocol  │
+     │                         │ 4. Send requests       │──────────────────▶|
+     │                         │                        │                    │
+     │                         │                        │      HTTP/2        │
+     │                         │                        │      Multiplex     │
+     │                         │                        │◀──────────────────│
+```
+
+#### Key Characteristics
+
+- ✅ **HTTP/2 Support** - Full HTTP/2 protocol implementation with HPACK compression
+- ✅ **HTTP/1.1 Support** - Traditional HTTP/1.1 with Keep-Alive connections
+- ✅ **Mixed Protocol Mode** - Automatically switches between HTTP/2 and HTTP/1.1
+- ✅ **Proxy Rotation** - SOCKS5/HTTP proxy support with automatic rotation
+- ✅ **High Performance** - Optimized for 100,000+ requests per second
+- ✅ **Multi-threaded** - Cluster-based architecture for maximum throughput
+- ✅ **Custom Headers** - Full control over HTTP headers and user agents
+- ✅ **Rate Limiting** - Intelligent rate limiting with randomization
+- ✅ **Bot Fight Mode** - Cloudflare challenge bypass with cookie generation
+- ✅ **Debug Mode** - Real-time status code monitoring
+
+#### Attack Signatures
+
+The tool can be identified by these characteristics:
+
+1. **High Request Rate** - Unusually high requests per second
+2. **HTTP/2 Settings** - Specific HTTP/2 connection settings
+3. **Header Patterns** - Consistent header patterns
+4. **Proxy IPs** - Known proxy IP addresses
+5. **User-Agent Patterns** - Repeated user-agent strings
+
+#### Impact
+
+- ⚠️ **Resource Exhaustion** - Server processes high volume of requests
+- ⚠️ **Bandwidth Consumption** - High request rate consumes network bandwidth
+- ⚠️ **Service Degradation** - Can cause slowdowns or complete outage
+- ⚠️ **Rate Limit Bypass** - Can bypass rate limiting with randomization
 
 ---
 
@@ -540,6 +610,38 @@ sudo ./rape 192.168.1.100 80 300 60 100000 syn
 sudo ./rape 192.168.1.100 443 300 60 100000 ack
 ```
 
+#### HTTP-STORM: HTTP/2 Load Testing
+
+```bash
+# Basic syntax (Node.js required)
+node http-storm.js <METHOD> <TARGET> <TIME> <THREADS> <RATELIMIT> <PROXYFILE> [OPTIONS]
+
+# Example: Basic HTTP/2 load test
+node http-storm.js GET "https://example.com" 120 32 90 proxy.txt
+
+# Example: Advanced configuration with all features
+node http-storm.js GET "https://example.com?q=%RAND%" 120 32 90 proxy.txt \
+  --query 1 \
+  --cookie "session=abc123" \
+  --delay 0 \
+  --bfm true \
+  --referer rand \
+  --debug \
+  --randrate \
+  --full
+
+# Example: POST request with data
+node http-storm.js POST "https://api.example.com/login" 60 16 50 proxy.txt \
+  --postdata "username=test&password=%RAND%" \
+  --header "Content-Type:application/x-www-form-urlencoded"
+
+# Example: HTTP/1.1 only mode
+node http-storm.js GET "https://example.com" 120 32 90 proxy.txt --http 1
+
+# Example: Mixed protocol mode
+node http-storm.js GET "https://example.com" 120 32 90 proxy.txt --http mix
+```
+
 **Parameters:**
 - `target_ip` - Target server IP address
 - `target_port` - Target TCP port (e.g., 80, 443, 22)
@@ -586,6 +688,15 @@ sudo ./rape 192.168.1.100 443 300 60 100000 ack
 [LIVE] PPS: 185000 | Total: 11100000 | SYN: 1230000 | ACK: 1230000 | FIN: 1230000 | RST: 1230000 | PSH: 1230000 | URG: 1230000 | MIXED: 1230000 | Mbps: 148.00
 ```
 
+**Example Output (HTTP-STORM - HTTP/2):**
+```
+🌪️ HTTP-STORM v2.0 ENHANCED - Optimized for 200k+ req/s
+📊 Threads: 32 | Proxies: 1000
+
+[DEBUG MODE] Status Codes:
+2024-01-01 12:00:00 { '200': 50000, '429': 100, '503': 50 }
+```
+
 ### Testing Protection
 
 1. **Set up protection rules** (see protection guides)
@@ -620,19 +731,29 @@ sudo ./rape 192.168.1.100 443 300 60 100000 ack
 
 #### TCP-RAPE: Multi-Vector Attack
 
-| Document          | Description                    | Location                    |
-|-------------------|--------------------------------|-----------------------------|
-| **README.md**     | Attack overview, usage, and features | `L4/TCP/RAPE/README.md`     |
+| Document              | Description                            | Location                        |
+|-----------------------|----------------------------------------|---------------------------------|
+| **README.md**         | Attack overview, usage, and features   | `L4/TCP/RAPE/README.md`         |
 | **USAGE_EXAMPLES.md** | Practical usage examples and scenarios | `L4/TCP/RAPE/USAGE_EXAMPLES.md` |
-| **CHANGELOG.md**  | Version history and changes    | `L4/TCP/RAPE/CHANGELOG.md`  |
-| **CONTRIBUTING.md** | Contribution guidelines     | `L4/TCP/RAPE/CONTRIBUTING.md` |
-| **SECURITY.md**   | Security policy                | `L4/TCP/RAPE/SECURITY.md`   |
+| **CHANGELOG.md**      | Version history and changes            | `L4/TCP/RAPE/CHANGELOG.md`      |
+| **CONTRIBUTING.md**   | Contribution guidelines                | `L4/TCP/RAPE/CONTRIBUTING.md`   |
+| **SECURITY.md**       | Security policy                        | `L4/TCP/RAPE/SECURITY.md`       |
+
+#### HTTP-STORM: HTTP/2 Flood Attack
+
+| Document           | Description                                      | Location                        |
+|--------------------|--------------------------------------------------|---------------------------------|
+| **README.md**      | Comprehensive documentation, usage, and features | `L7/HTTP-STORM/README.md`       |
+| **http-storm.js**  | HTTP/2 load testing implementation               | `L7/HTTP-STORM/http-storm.js`   |
+| **package.json**   | Node.js dependencies                             | `L7/HTTP-STORM/package.json`    |
+| **PROTECTION/**    | Comprehensive protection guides and strategies   | `L7/HTTP-STORM/PROTECTION/`     |
 
 ### Protection Guides
 
 - **ACK Flood:** See `L4/TCP/ACK/README.md` and `L4/TCP/ACK/PROTECTION/SIGNATURE_BASED_PROTECTION_GR.md`
 - **SYN Flood:** See `L4/TCP/SYN/README.md` and `L4/TCP/SYN/PROTECTION/SIGNATURE_BASED_PROTECTION_GR.md`
 - **RAPE (Multi-Vector):** See `L4/TCP/RAPE/README.md` for comprehensive protection strategies
+- **HTTP-STORM (HTTP/2):** See `L7/HTTP-STORM/PROTECTION/README.md` and `L7/HTTP-STORM/PROTECTION/PROTECTION_GUIDE.md` for comprehensive protection strategies
 
 ---
 
@@ -834,16 +955,17 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 - ✅ **TCP SYN Flood** (`syn.c`) - Fully implemented with documentation
 - ✅ **TCP-AMP: SYN-ACK + BGP** (`amp.c`) - Fully implemented
 - ✅ **TCP-RAPE: Multi-Vector** (`rape.c`) - v2.0.0 with clever bypass techniques
+- ✅ **HTTP-STORM Flood Attack** (`rape.c`) - Fully optimised for max performance with clever bypass techniques to known Protections
 
 ### Planned Updates
 
 More attack methods will be added incrementally:
 - [ ] **UDP Flood** - UDP-based flood attacks
-- [ ] **HTTP Flood** - Layer 7 HTTP flood attacks
+- [+] **HTTP Flood** - Layer 7 HTTP flood attacks
 - [ ] **Slowloris** - Slow HTTP attack
 - [ ] **DNS Amplification** - DNS amplification attack
 - [ ] **NTP Amplification** - NTP amplification attack
-- [ ] **Minecraft Attack** - Protocol-specific attacks
+- [ ] **Well Engineered Game Flood/DDos Attacks** - Protocol-specific attacks
 
 ### Future Enhancements
 
@@ -859,13 +981,15 @@ More attack methods will be added incrementally:
 
 Typical performance on modern hardware:
 
-| Attack         | Threads | PPS  | CPU Usage | Memory | Packet Size     |
-|----------------|---------|------|-----------|--------|-----------------|
-| ACK Flood      | 300     | 100k | 40%       | 200MB  | ~1500 bytes     |
-| SYN Flood      | 300     | 100k | 35%       | 150MB  | ~40-80 bytes    |
-| RAPE (All Mode)| 500     | 200k | 70%       | 400MB  | ~60-1500 bytes  |
-| RAPE (Elite)   | 500     | 200k | 70%       | 400MB  | ~60-1500 bytes  |
-| RAPE (Stealth) | 500     | 200k | 70%       | 400MB  | ~60-1500 bytes  |
+| Attack             | Threads | PPS/RPS   | CPU Usage | Memory      | Packet/Request Size |
+|--------------------|---------|-----------|-----------|-------------|---------------------|
+| ACK Flood          | 300     | 100k      | 40%       | 200MB       | ~1500 bytes         |
+| SYN Flood          | 300     | 100k      | 35%       | 150MB       | ~40-80 bytes        |
+| RAPE (All Mode)    | 500     | 200k      | 70%       | 400MB       | ~60-1500 bytes      |
+| RAPE (Elite)       | 500     | 200k      | 70%       | 400MB       | ~60-1500 bytes      |
+| RAPE (Stealth)     | 500     | 200k      | 70%       | 400MB       | ~60-1500 bytes      |
+| HTTP-STORM (HTTP/2)| 32      | 50k-100k  | 40-60%    | 200-400MB   | Variable            |
+| HTTP-STORM (--full)| 128     | 200k+     | 80-100%   | 800MB+      | Variable            |
 
 *Results vary by hardware and network conditions*
 
@@ -918,10 +1042,11 @@ If you discover a vulnerability in protection mechanisms:
 **Active Development** - Multiple TCP flood attack implementations are complete and ready for use.
 
 **Available Attacks:**
-- ✅ TCP ACK Flood - Complete with protection guides
-- ✅ TCP SYN Flood - Complete with documentation
-- ✅ TCP-AMP: SYN-ACK + BGP - Complete with documentation
+- ✅ **TCP-ACK Flood** - Complete with protection guides
+- ✅ **TCP-SYN Flood** - Complete with documentation
+- ✅ **TCP-AMP: SYN-ACK + BGP** - Complete with documentation
 - ✅ **TCP-RAPE: Multi-Vector** - v2.0.0 with clever bypass techniques (Elite & Stealth modes)
+- ✅ **HTTP-STORM: HTTP/2 Load Testing** - v2.0 Enhanced for 100k+ req/s with HTTP/2 and HTTP/1.1 support
 
 **Next Updates:**
 - More attack methods will be added as separate updates
